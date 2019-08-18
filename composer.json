@@ -1,0 +1,28 @@
+{
+    "name": "sanjabteam/sanjab-persian-date-picker",
+    "description": "Persian date picker for laravel sanjab (https://github.com/sanjabteam/sanjab)",
+    "keywords": [
+        "sanjab",
+        "laravel"
+    ],
+    "homepage": "https://github.com/sanjabteam/sanjab-persian-date-picker",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "amir alizadeh",
+            "email": "amiralizadeh9480@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.1",
+        "illuminate/support": "5.8.*",
+        "hekmatinasser/verta": "1.9.*",
+        "sanjabteam/sanjab": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "SanjabPersianDatePicker\\": "src"
+        }
+    }
+}

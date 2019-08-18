@@ -1,0 +1,10 @@
+/.idea
+/.vscode
+/node_modules
+/vendor
+/resources/assets/css/*
+/resources/assets/js/*
+/resources/assets/mix-manifest.json
+/build
+composer.lock
+mix-manifest.json

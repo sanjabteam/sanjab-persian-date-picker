@@ -1,0 +1,16 @@
+{
+    "name": "sanjab-persian-date-picker",
+    "description": "Persian date picker for laravel sanjab (https://github.com/sanjabteam/sanjab)",
+    "version": "0.0.1",
+    "license": "MIT",
+    "private": false,
+    "author": "Amir Alizadeh <amiralizadeh9480@gmail.com>",
+    "main": "./resources/js/sanjab-persian-date-picker.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/sanjabteam/sanjab-persian-date-picker.git"
+    },
+    "dependencies": {
+        "vue-persian-datetime-picker": "2.0.2"
+    }
+}
