@@ -6,8 +6,10 @@ use stdClass;
 use Carbon\Carbon;
 use Hekmatinasser\Verta\Verta;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Sanjab\Widgets\Widget;
+use Sanjab\Helpers\SearchType;
 
 /**
  * Persian date picker widget.
@@ -56,6 +58,94 @@ class PersianDatePickerWidget extends Widget
             $this->setProperty("type", "date");
             $this->setProperty("format", "jYYYY/jMM/jDD");
             $this->rules('jdate');
+        }
+    }
+
+
+    /**
+     * Get search types.
+     *
+     * @return array|SearchType[]
+     */
+    protected function searchTypes(): array
+    {
+        return [
+            SearchType::create('empty', trans('sanjab::sanjab.is_empty')),
+            SearchType::create('not_empty', trans('sanjab::sanjab.is_not_empty')),
+            SearchType::create('equal', trans('sanjab::sanjab.equal'))
+                        ->addWidget(PersianDatePickerWidget::create('search', trans('sanjab::sanjab.equal'))->time($this->property('time'))),
+            SearchType::create('not_equal', trans('sanjab::sanjab.not_equal'))
+                        ->addWidget(PersianDatePickerWidget::create('search', trans('sanjab::sanjab.not_equal'))->time($this->property('time'))),
+            SearchType::create('more', trans('sanjab::sanjab.more'))
+                        ->addWidget(PersianDatePickerWidget::create('search', trans('sanjab::sanjab.more'))->time($this->property('time'))),
+            SearchType::create('more_or_eqaul', trans('sanjab::sanjab.more_or_eqaul'))
+                        ->addWidget(PersianDatePickerWidget::create('search', trans('sanjab::sanjab.more_or_eqaul'))->time($this->property('time'))),
+            SearchType::create('less', trans('sanjab::sanjab.less'))
+                        ->addWidget(PersianDatePickerWidget::create('search', trans('sanjab::sanjab.less'))->time($this->property('time'))),
+            SearchType::create('less_or_eqaul', trans('sanjab::sanjab.less_or_eqaul'))
+                        ->addWidget(PersianDatePickerWidget::create('search', trans('sanjab::sanjab.less_or_eqaul'))->time($this->property('time'))),
+            SearchType::create('between', trans('sanjab::sanjab.between'))
+                        ->addWidget(PersianDatePickerWidget::create('first', trans('sanjab::sanjab.between'))->time($this->property('time')))
+                        ->addWidget(PersianDatePickerWidget::create('second', trans('sanjab::sanjab.between'))->time($this->property('time'))),
+            SearchType::create('not_between', trans('sanjab::sanjab.not_between'))
+                        ->addWidget(PersianDatePickerWidget::create('first', trans('sanjab::sanjab.not_between'))->time($this->property('time')))
+                        ->addWidget(PersianDatePickerWidget::create('second', trans('sanjab::sanjab.not_between'))->time($this->property('time'))),
+        ];
+    }
+
+    /**
+     * To override search query modify.
+     *
+     * @param Builder $query
+     * @param string $type
+     * @param mixed $search
+     * @return void
+     */
+    protected function search(Builder $query, string $type = null, $search = null)
+    {
+        if (is_array($search)) {
+            foreach ($search as $key => $value) {
+                try {
+                    $search[$key] = Verta::parse($value)->DateTime();
+                } catch (\Exception $exception) {
+                    return;
+                }
+            }
+        } else {
+            try {
+                $search = Verta::parse($search)->DateTime();
+            } catch (\Exception $exception) {
+                return;
+            }
+        }
+        switch ($type) {
+            case 'equal':
+                $query->where($this->property('name'), '=', $search);
+                break;
+            case 'not_equal':
+                $query->where($this->property('name'), '!=', $search);
+                break;
+            case 'more':
+                $query->where($this->property('name'), '>', $search);
+                break;
+            case 'more_or_eqaul':
+                $query->where($this->property('name'), '>=', $search);
+                break;
+            case 'less':
+                $query->where($this->property('name'), '<', $search);
+                break;
+            case 'less_or_eqaul':
+                $query->where($this->property('name'), '<=', $search);
+                break;
+            case 'between':
+                $query->whereBetween($this->property('name'), [$search['first'] < $search['second'] ? $search['first'] : $search['second'], $search['first'] < $search['second'] ? $search['second'] : $search['first']]);
+                break;
+            case 'not_between':
+                $query->whereNotBetween($this->property('name'), [$search['first'] < $search['second'] ? $search['first'] : $search['second'], $search['first'] < $search['second'] ? $search['second'] : $search['first']]);
+                break;
+            default:
+                parent::search($query, $type, $search);
+                break;
         }
     }
 }

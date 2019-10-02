@@ -16,7 +16,7 @@
     ],
     "require": {
         "php": "^7.1",
-        "illuminate/support": "5.8.*",
+        "illuminate/support": "^5.8|^6.0",
         "hekmatinasser/verta": "1.9.*",
         "sanjabteam/sanjab": "*"
     },
