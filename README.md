@@ -20,6 +20,11 @@ Install the sanjab npm package.
 npm install sanjab --save-dev
 ```
 
+> You should install the same version of the composer package if you don't have latest version.
+
+```bash
+npm install sanjab@VERSION --save-dev
+```
 ---
 
 Install sanjab Persian Date picker via npm.
@@ -27,11 +32,6 @@ Install sanjab Persian Date picker via npm.
 npm install sanjab-persian-date-picker --save-dev
 ```
 
-> You should install the same version of the composer package if you don't have latest version.
-
-```bash
-npm install sanjab@VERSION --save-dev
-```
 ---
 
 Install sanjab Persian Date picker via composer.
