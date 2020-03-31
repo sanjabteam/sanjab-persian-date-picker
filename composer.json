@@ -15,9 +15,9 @@
         }
     ],
     "require": {
-        "php": "^7.1",
-        "illuminate/support": "^5.8|^6.0",
-        "hekmatinasser/verta": "1.9.*",
+        "php": "^7.2.5",
+        "illuminate/support": "^6|^7",
+        "hekmatinasser/verta": "1.10.*",
         "sanjabteam/sanjab": "*"
     },
     "autoload": {

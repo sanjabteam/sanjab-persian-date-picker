@@ -11,6 +11,6 @@
         "url": "https://github.com/sanjabteam/sanjab-persian-date-picker.git"
     },
     "dependencies": {
-        "vue-persian-datetime-picker": "2.0.2"
+        "vue-persian-datetime-picker": "2.1.4"
     }
 }
