@@ -144,7 +144,13 @@ class PersianDatePickerWidget extends Widget
                 $query->whereNotBetween($this->property('name'), [$search['first'] < $search['second'] ? $search['first'] : $search['second'], $search['first'] < $search['second'] ? $search['second'] : $search['first']]);
                 break;
             default:
-                parent::search($query, $type, $search);
+                if (intval($search->format('Y')) >= 1900 && intval($search->format('Y')) <= 2100) {
+                    if ($this->property('time')) {
+                        $query->where($this->property('name'), '=', $search);
+                    } else {
+                        $query->whereDate($this->property('name'), '=', $search);
+                    }
+                }
                 break;
         }
     }
