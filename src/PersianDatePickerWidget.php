@@ -107,23 +107,44 @@ class PersianDatePickerWidget extends Widget
             foreach ($search as $key => $value) {
                 try {
                     $search[$key] = Verta::parse($value)->DateTime();
+                    if ($this->property('time')) {
+                        $search[$key]->setTime($search[$key]->format('H'), $search[$key]->format('i'));
+                    }
                 } catch (\Exception $exception) {
                     return;
                 }
             }
+            if ($this->property('time')) {
+                $search['second']->modify('+59 seconds');
+            } else {
+                $search['second']->modify('+23 hours +59 minutes +59 seconds');
+            }
         } else {
             try {
                 $search = Verta::parse($search)->DateTime();
+                if ($this->property('time')) {
+                    $search->setTime($search->format('H'), $search->format('i'));
+                }
+                if (in_array($type, ['equal', 'not_equal'])) {
+                    $search = ['first' => $search];
+                    $search['second'] = clone $search['first'];
+                    if ($this->property('time')) {
+                        $search['second']->modify('+59 seconds');
+                    } else {
+                        $search['second']->modify('+23 hours +59 minutes +59 seconds');
+                    }
+                    $search = array_values($search);
+                }
             } catch (\Exception $exception) {
                 return;
             }
         }
         switch ($type) {
             case 'equal':
-                $query->where($this->property('name'), '=', $search);
+                $query->whereBetween($this->property('name'), $search);
                 break;
             case 'not_equal':
-                $query->where($this->property('name'), '!=', $search);
+                $query->whereNotBetween($this->property('name'), $search);
                 break;
             case 'more':
                 $query->where($this->property('name'), '>', $search);
@@ -144,7 +165,7 @@ class PersianDatePickerWidget extends Widget
                 $query->whereNotBetween($this->property('name'), [$search['first'] < $search['second'] ? $search['first'] : $search['second'], $search['first'] < $search['second'] ? $search['second'] : $search['first']]);
                 break;
             default:
-                if (intval($search->format('Y')) >= 1900 && intval($search->format('Y')) <= 2100) {
+                if (intval($search->format('Y')) >= 1900 && intval($search->format('Y')) <= 2200) {
                     if ($this->property('time')) {
                         $query->where($this->property('name'), '=', $search);
                     } else {
